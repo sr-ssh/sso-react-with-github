@@ -1,0 +1,46 @@
+body {
+	font-family: "Arial", sans-serif;
+	background-color: #f4f4f4;
+	display: flex;
+	height: 100vh;
+	justify-content: center;
+	align-items: center;
+	margin: 0;
+}
+
+.login-container {
+	background: white;
+	padding: 2rem;
+	border-radius: 5px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	text-align: center;
+}
+
+.login-container h1 {
+	margin-top: 0;
+}
+
+.github-button {
+	background-color: #24292e;
+	color: white;
+	border: none;
+	padding: 10px 15px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 5px;
+	transition: background-color 0.3s ease;
+}
+
+.github-button:hover {
+	background-color: #3c4147;
+}
+
+.github-button img {
+	vertical-align: middle;
+	height: 24px;
+	margin-right: 10px;
+}
