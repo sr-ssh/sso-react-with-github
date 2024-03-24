@@ -7,6 +7,7 @@ app = FastAPI()
 CLIENT_ID = "9f4896d23af74ccd7e95"
 CLIENT_SECRET = "0363eaad1c7e184d13cb2a1703846eb6d4dbde13"
 
+
 @app.get("/oauth/redirect")
 def oauth_redirect(code: str):
     # Exchange code for access token
@@ -21,7 +22,8 @@ def oauth_redirect(code: str):
     )
 
     if token_response.status_code != 200:
-        raise HTTPException(status_code=400, detail="Error fetching access token from GitHub.")
+        raise HTTPException(
+            status_code=400, detail="Error fetching access token from GitHub.")
 
     # Extract the access token
     token_data = token_response.json()
@@ -35,11 +37,14 @@ def oauth_redirect(code: str):
     )
 
     if user_response.status_code != 200:
-        raise HTTPException(status_code=400, detail="Error fetching user data from GitHub.")
+        raise HTTPException(
+            status_code=400, detail="Error fetching user data from GitHub.")
 
     user_data = user_response.json()
     print(f'Github profile: {user_data}')
-    return user_data
+
+    return {"userData": user_data, "token": access_token, "tokenType": token_type}
+
 
 if __name__ == '__main__':
     uvicorn.run(app, host='0.0.0.0', port=8589)

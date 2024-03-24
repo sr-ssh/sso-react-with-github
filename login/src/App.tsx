@@ -2,22 +2,41 @@ import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
+	// Extracting the 'code' parameter from the URL query string
 	const urlParams = new URLSearchParams(window.location.search);
 	const code = urlParams.get("code");
+
+	// State to store the retrieved data from the server
 	const [data, setData] = useState<unknown>();
 
 	useEffect(() => {
+		const token = localStorage.getItem("token");
+		token &&
+			fetch("https://api.github.com/user", {
+				headers: { Authorization: token },
+			}).then((res) => {
+				res.json().then((data) => {
+					console.log(data);
+					setData(data.userData);
+				});
+			});
+		// Fetching data from the server if 'code' is available
 		code &&
 			fetch(
 				`http://localhost:8589/oauth/redirect?code=${code}&state=YOUR_RANDOMLY_GENERATED_STATE`
 			).then((res) => {
 				res.json().then((data) => {
 					console.log(data);
-					setData(data);
+					setData(data.userData);
+					localStorage.setItem(
+						"token",
+						`${data.tokenType} ${data.token}`
+					);
 				});
 			});
 	}, [code]);
 
+	// Function to redirect the user to the GitHub OAuth authorization page
 	function redirectToGitHub() {
 		const client_id = "9f4896d23af74ccd7e95";
 		const redirect_uri = "http://localhost:5173/";
@@ -29,6 +48,7 @@ function App() {
 		window.location.href = authUrl;
 	}
 
+	// Render the retrieved data if available, otherwise render the login button
 	if (data) {
 		return <h5>{JSON.stringify(data)}</h5>;
 	}
