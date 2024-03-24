@@ -4,8 +4,8 @@ import requests
 
 app = FastAPI()
 
-CLIENT_ID = "9f4896d23af74ccd7e95"
-CLIENT_SECRET = "0363eaad1c7e184d13cb2a1703846eb6d4dbde13"
+CLIENT_ID = "e48aa4546bef3e3ede25"
+CLIENT_SECRET = "38b24e6096fc5ab757a27d3e55487929a3afdf29"
 
 
 @app.get("/oauth/redirect")
@@ -27,6 +27,7 @@ def oauth_redirect(code: str):
 
     # Extract the access token
     token_data = token_response.json()
+    print(token_data)
     access_token = token_data["access_token"]
     token_type = token_data["token_type"]
 
