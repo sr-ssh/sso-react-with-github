@@ -1,4 +1,4 @@
-## sso-react-with-github
+# Implementing SSO in React with GitHub OAuth2
 
 **Seamless Single Sign-On (SSO) for React Apps using GitHub Authentication (Sample Code)**
 
