@@ -3,38 +3,43 @@ import "./App.css";
 import Profile from "./components/profile/Profile";
 
 function App() {
-	// Extracting the 'code' parameter from the URL query string
+	// Extracting the 'code' parameter from the URL query string (used for authorization)
 	const urlParams = new URLSearchParams(window.location.search);
 	const code = urlParams.get("code");
 
-	// State to store the retrieved data from the server
-	const [data, setData] = useState<unknown>(null);
+	// State to store the retrieved user data
+	const [data, setData] = useState(null);
+	// State to indicate if data is being fetched
+	const [loading, setLoading] = useState(false);
 
+	// Runs whenever the 'code' variable changes (likely on authorization flow)
 	useEffect(() => {
 		const token = localStorage.getItem("token");
 		if (token) {
+			setLoading(true); // Set loading to true while fetching data
 			fetch("https://api.github.com/user", {
 				headers: { Authorization: token },
-			}).then((res) => {
-				res.json().then((data) => {
-					console.log(data);
-					setData(data.userData);
+			})
+				.then((res) => res.json()) // Parse the response as JSON
+				.then((data) => {
+					setData(data); // Update state with fetched user data
+					setLoading(false); // Set loading to false when done fetching
 				});
-			});
 		} else if (code) {
-			// Fetching data from the server if 'code' is available
+			// If no token but 'code' is available (GitHub OAuth flow)
+			setLoading(true); // Set loading to true while fetching data
 			fetch(
 				`http://localhost:8589/oauth/redirect?code=${code}&state=YOUR_RANDOMLY_GENERATED_STATE`
-			).then((res) => {
-				res.json().then((data) => {
-					console.log(data);
-					setData(data.userData);
+			)
+				.then((res) => res.json()) // Parse the response as JSON
+				.then((data) => {
+					setData(data.userData); // Update state with user data from response
 					localStorage.setItem(
 						"token",
 						`${data.tokenType} ${data.token}`
-					);
+					); // Store access token in local storage
+					setLoading(false); // Set loading to false when done fetching
 				});
-			});
 		}
 	}, [code]);
 
@@ -49,7 +54,11 @@ function App() {
 		window.location.href = authUrl;
 	}
 
-	// Render the retrieved data if available, otherwise render the login button
+	// Conditionally render content based on loading state and data availability
+	if (loading) {
+		return <h4>Loading...</h4>;
+	}
+
 	if (data) {
 		return <Profile user={data} />;
 	}

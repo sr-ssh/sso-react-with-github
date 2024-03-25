@@ -5,6 +5,9 @@ type UserType = {
 	login: string;
 	id: string;
 	type: string;
+	followers: number;
+	following: number;
+	public_repos: number;
 };
 
 const Profile = ({ user }: { user: UserType }) => {
@@ -22,6 +25,9 @@ const Profile = ({ user }: { user: UserType }) => {
 				<p>Login: {user.login}</p>
 				<p>ID: {user.id}</p>
 				<p>Type: {user.type}</p>
+				<p>Followers: {user.followers}</p>
+				<p>Following: {user.following}</p>
+				<p>Public Repos: {user.public_repos}</p>
 			</div>
 		</div>
 	);
